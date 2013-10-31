@@ -1,0 +1,30 @@
+upstream build_cloud_app {
+  server localhost:3030;
+}
+
+server {
+  listen                 *:80;
+  listen                 *:443 ssl;
+
+  ssl_certificate        /etc/pki/tls/certs/self_signed.crt;
+  ssl_certificate_key    /etc/pki/tls/private/self_signed.key;
+
+  # vhost regex also sets $domain
+  server_name            ~^(cloud|cloud\.local)\.(?<domain>pullsdirect|ventingdirect)\.[a-z]+$;
+
+  access_log             /var/log/nginx/cloud.build.com.access.log;
+  location / {
+    proxy_pass           http://build_cloud_app;
+    proxy_read_timeout   30;
+    proxy_set_header     Host $host:3030;
+    proxy_set_header     X-Real-IP $remote_addr;
+    proxy_set_header     X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+  location /vadmin {
+    return               301 $scheme://$host:8080/;
+  }
+
+  # Rewrite test
+  # ex. /foobar/c108537 to /wall-sconces/c108537
+  rewrite                ^/foobar/(c[0-9]+)$            $scheme://$host/wall-sconces/$1 permanent;
+}
