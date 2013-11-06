@@ -1,2 +1,5 @@
 build_sites::build_cloud:
   'environment': sandbox
+
+newrelic::nginx_agent:
+  license_key: UPDATEME

@@ -3,6 +3,7 @@ include redis
 include user::nodejs
 include redis
 include build_sites::ssl_self_signed
+include newrelic::nginx_agent
 
 class { 'nodejs':
   version           => 'v0.10.21',
