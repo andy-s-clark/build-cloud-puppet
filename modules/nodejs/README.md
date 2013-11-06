@@ -69,8 +69,7 @@ class { 'nodejs':
 ```
 
 By default, this module creates symlinks for each Node.js version installed into
-`/usr/local/bin`. You can change this behavior by using the `target_dir`
-parameter.
+`/usr/local/bin`. A nodejs::install define creates a versioned symlink like `/usr/local/bin/node-v0.10.17`. The class `nodejs` creates the default symlink `/usr/local/bin/node`. You can change this behavior by using the `target_dir` parameter.
 
 Also, this module installs [NPM](https://npmjs.org/) by default. You can set the
 `with_npm` parameter to `false` to not install it.
@@ -117,6 +116,13 @@ Install the dependencies using [Bundler](http://gembundler.com):
 Run the following command:
 
     BUNDLE_GEMFILE=.gemfile bundle exec rake test
+
+
+Authors
+-------
+
+* William Durand <william.durand1@gmail.com>
+* Johannes Graf ([@grafjo](https://github.com/grafjo))
 
 
 License

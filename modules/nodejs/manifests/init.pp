@@ -23,8 +23,8 @@
 #  }
 #
 class nodejs (
-  $version      = undef,
-  $target_dir   = undef,
+  $version      = 'stable',
+  $target_dir   = '/usr/local/bin',
   $with_npm     = true,
   $make_install = true,
 ) {
@@ -34,5 +34,39 @@ class nodejs (
     target_dir    => $target_dir,
     with_npm      => $with_npm,
     make_install  => $make_install,
+  }
+
+  $node_version = $version ? {
+    undef     => $::nodejs_stable_version,
+    'stable'  => $::nodejs_stable_version,
+    'latest'  => $::nodejs_latest_version,
+    default   => $version
+  }
+
+  $node_symlink_target = "/usr/local/node/node-${$node_version}/bin/node"
+  $npm_symlink_target = "/usr/local/node/node-${$node_version}/bin/npm"
+
+  $node_binary = $target_dir ? {
+    undef   => '/usr/local/bin/node',
+    default => "${target_dir}/node"
+  }
+
+  $npm_binary = $target_dir ? {
+    undef   => '/usr/local/bin/npm',
+    default => "${target_dir}/npm"
+  }
+
+  file { $node_binary:
+    ensure  => 'link',
+    target  => $node_symlink_target,
+    require => Nodejs::Install["nodejs-${version}"],
+  }
+
+  if $with_npm {
+    file { $npm_binary:
+      ensure  => 'link',
+      target  => $npm_symlink_target,
+      require => Nodejs::Install["nodejs-${version}"],
+    }
   }
 }
