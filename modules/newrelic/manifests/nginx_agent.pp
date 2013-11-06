@@ -30,7 +30,7 @@ class newrelic::nginx_agent {
       mode        => 0660,
       content     => template('newrelic/nginx_agent/newrelic_plugin.yml.erb'),
       require     => Exec['newrelic_nginx_agent_install'];
-    '/etc/nginx/conf.d/stub_status.conf.erb':
+    '/etc/nginx/conf.d/stub_status.conf':
       ensure      => present,
       content     => template('newrelic/nginx_agent/stub_status.conf.erb'),
       require     => Class['nginx::package'],
