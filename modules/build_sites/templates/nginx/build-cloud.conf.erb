@@ -20,11 +20,4 @@ server {
     proxy_set_header     X-Real-IP $remote_addr;
     proxy_set_header     X-Forwarded-For $proxy_add_x_forwarded_for;
   }
-  location /vadmin {
-    return               301 $scheme://$host:8080/;
-  }
-
-  # Rewrite test
-  # ex. /foobar/c108537 to /wall-sconces/c108537
-  rewrite                ^/foobar/(c[0-9]+)$            $scheme://$host/wall-sconces/$1 permanent;
 }
